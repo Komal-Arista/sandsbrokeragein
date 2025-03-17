@@ -1,0 +1,7 @@
+wp-admin/error_log
+node_modules/
+.env
+# Ignore specific WordPress themes
+wp-content/themes/twentytwentyfive/
+wp-content/themes/twentytwentyfour/
+wp-content/themes/twentytwentytwo/
