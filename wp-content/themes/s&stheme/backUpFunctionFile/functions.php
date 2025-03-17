@@ -782,9 +782,9 @@ function show_search_page_links_on_account_page() {
 			?>
 			<script>
 				jQuery(document).ready(function(){
-					jQuery(".um-account-side ul").append('<li id="sns-search-page"><a href="<?php echo site_url("/search/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-search"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-search"></i></span><span class="um-account-title uimob800-hide">Search</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
+					jQuery(".um-account-side ul").append('<li id="sns-search-page"><a href="https://www.sandsbrokerageinc.com/search/" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-search"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-search"></i></span><span class="um-account-title uimob800-hide">Search</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-search-page').click(function(){
-					   window.location.href = "<?php echo site_url('/search/'); ?>";
+					   window.location.href = 'https://www.sandsbrokerageinc.com/search/';
 					});
 				});
 			</script>
@@ -796,9 +796,9 @@ function show_search_page_links_on_account_page() {
 			?>
 			<script>
 				jQuery(document).ready(function(){
-					jQuery(".um-account-side ul").append('<li id="sns-user-page"><a href="<?php echo site_url("/list-user/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-user"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-users"></i></span><span class="um-account-title uimob800-hide">Users List</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
+					jQuery(".um-account-side ul").append('<li id="sns-user-page"><a href="https://www.sandsbrokerageinc.com/list-user/" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-user"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-users"></i></span><span class="um-account-title uimob800-hide">Users List</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-user-page').click(function(){
-						window.location.href = "<?php echo site_url('/list-user/'); ?>";
+						window.location.href = 'https://www.sandsbrokerageinc.com/list-user/';
 					});
 				});
 			</script>
@@ -810,29 +810,29 @@ function show_search_page_links_on_account_page() {
 			?>
 			<script>
 				jQuery(document).ready(function(){
-					jQuery(".um-account-side ul").append('<li id="sns-search-page"><a href="<?php echo site_url("/search/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-search"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-search"></i></span><span class="um-account-title uimob800-hide">Search</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
+					jQuery(".um-account-side ul").append('<li id="sns-search-page"><a href="https://www.sandsbrokerageinc.com/search/" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-search"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-search"></i></span><span class="um-account-title uimob800-hide">Search</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-search-page').click(function(){
-					   window.location.href = "<?php echo site_url("/search/"); ?>";
+					   window.location.href = 'https://www.sandsbrokerageinc.com/search/';
 					});
 
-					jQuery(".um-account-side ul").append('<li id="sns-adv-search-page"><a href="<?php echo site_url("/advance-search/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-search-plus"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-search-plus"></i></span><span class="um-account-title uimob800-hide">Advance Search</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
+					jQuery(".um-account-side ul").append('<li id="sns-adv-search-page"><a href="https://www.sandsbrokerageinc.com/advance-search/" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-search-plus"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-search-plus"></i></span><span class="um-account-title uimob800-hide">Advance Search</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-adv-search-page').click(function(){
-					   window.location.href = "<?php echo site_url("/advance-search/"); ?>";
+					   window.location.href = 'https://www.sandsbrokerageinc.com/advance-search/';
 					});
 
-					jQuery(".um-account-side ul").append('<li id="sns-user-analytics-page"><a href="<?php echo site_url("/user-analytics/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-calculator"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-calculator"></i></span><span class="um-account-title uimob800-hide">User Analytics</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
+					jQuery(".um-account-side ul").append('<li id="sns-user-analytics-page"><a href="https://www.sandsbrokerageinc.com/user-analytics/" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-calculator"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-calculator"></i></span><span class="um-account-title uimob800-hide">User Analytics</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-user-analytics-page').click(function(){
-					   window.location.href = "<?php echo site_url("/user-analytics/"); ?>";
+					   window.location.href = 'https://www.sandsbrokerageinc.com/user-analytics/';
 					});
 
-					jQuery(".um-account-side ul").append('<li id="sns-agent-activity-log-page"><a href="<?php echo site_url("/agent-activity-logs/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-user"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-user"></i></span><span class="um-account-title uimob800-hide">Agent Activity Logs</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
+					jQuery(".um-account-side ul").append('<li id="sns-agent-activity-log-page"><a href="https://www.sandsbrokerageinc.com/agent-activity-logs/" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-user"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-user"></i></span><span class="um-account-title uimob800-hide">Agent Activity Logs</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-agent-activity-log-page').click(function(){
-					   window.location.href = "<?php echo site_url("/agent-activity-logs/"); ?>";
+					   window.location.href = 'https://www.sandsbrokerageinc.com/agent-activity-logs/';
 					});
 
-					jQuery(".um-account-side ul").append('<li id="sns-add-new-customer-page"><a href="<?php echo site_url("/customers-data/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-icon-person"></i></span><span class="um-account-icon uimob800-hide"><i class="um-icon-person"></i></span><span class="um-account-title uimob800-hide">Add New Customer</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
+					jQuery(".um-account-side ul").append('<li id="sns-add-new-customer-page"><a href="https://www.sandsbrokerageinc.com/customers-data/" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-icon-person"></i></span><span class="um-account-icon uimob800-hide"><i class="um-icon-person"></i></span><span class="um-account-title uimob800-hide">Add New Customer</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-add-new-customer-page').click(function(){
-					   window.location.href = "<?php echo site_url("/customers-data/"); ?>";
+					   window.location.href = 'https://www.sandsbrokerageinc.com/customers-data/';
 					});
 				});
 			</script>
@@ -857,9 +857,9 @@ function show_search_page_links_on_account_page() {
 					jQuery('.um-account-name').append('<div class="account-role" style="text-transform: capitalize;"><?php echo esc_html(str_replace('_', ' ', $user->roles[0]))?></div>');
 					jQuery('.um-account-name').append('<div class="account-name"><?php echo esc_html($location_name); ?></div>');
 
-					jQuery(".um-account-side ul").append('<li id="sns-logout"><a href="<?php echo site_url("/logout/"); ?>" class="um-account-link real_url"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-user"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-sign-out"></i></span><span class="um-account-title uimob800-hide">Logout</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
+					jQuery(".um-account-side ul").append('<li id="sns-logout"><a href="https://www.sandsbrokerageinc.com/logout/" class="um-account-link real_url"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-user"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-sign-out"></i></span><span class="um-account-title uimob800-hide">Logout</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-logout').click(function(){
-					   window.location.href = "<?php echo site_url('/logout/'); ?>";
+					   window.location.href = 'https://www.sandsbrokerageinc.com/logout/';
 					});
 				});
 			</script>
@@ -1119,6 +1119,15 @@ function get_client_ip() {
 		$ipaddress = 'UNKNOWN';
 	return $ipaddress;
 }
+
+function restrictedPages() {
+	if(get_client_ip() != '180.151.44.206' && get_client_ip() != '103.229.27.26' && get_client_ip() != '203.193.167.99' && get_client_ip() != '115.247.107.18' && get_client_ip() != '183.177.127.146' && get_client_ip() != '50.184.119.78' && get_client_ip() != '14.195.111.10' && get_client_ip() != '122.176.23.236' && get_client_ip() != '67.83.5.228'){
+	?>
+		<script> location.replace("<?php echo site_url();?>"); </script>
+	<?php
+	}
+}
+add_shortcode('restrictedpages', 'restrictedPages');
 
 // Handle User Analytics Logs Page Data
 function handle_user_analytics_ajax() {

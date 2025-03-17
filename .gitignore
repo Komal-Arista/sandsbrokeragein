@@ -1,7 +1,9 @@
 wp-admin/error_log
 node_modules/
 .htaccess
+config.json
 .env
+error_log*
 # Ignore specific WordPress themes
 wp-content/themes/twentytwentyfive/
 wp-content/themes/twentytwentyfour/
