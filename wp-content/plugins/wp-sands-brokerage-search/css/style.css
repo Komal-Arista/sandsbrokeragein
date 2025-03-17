@@ -1,0 +1,137 @@
+/* This is BMS Styelsheet */
+
+.bms-container {
+    max-width: 550px;
+    margin: 50px auto;
+    padding: 40px 40px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.bms-container .form-group {
+    margin-bottom: 20px;
+}
+
+.bms-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.bms-container input[type="file"] {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.bms-container .btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.bms-container .btn:hover {
+    background-color: #0056b3;
+}
+
+.success {
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    color: green;
+    border: 1px solid #c3c4c7;
+    border-left-width: 6px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+    margin: 3px 0px 15px !important;
+    padding: 8px 12px !important;
+    width: 86.5%;
+    font-size: 16px;
+    border-left-color: green !important;
+}
+
+.error {
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    color: red;
+    border: 1px solid #c3c4c7;
+    border-left-width: 6px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+    margin: 3px 0px 15px !important;
+    padding: 8px 12px !important;
+    width: 86.5%;
+    font-size: 16px;
+}
+
+
+.bms-container lable {
+    font-size: 18px;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    padding-bottom: 20px;
+}
+.form-input.custom-form {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    text-align: center;
+    gap: 25px;
+}
+.bms-container h1 {
+    margin-top: 0 !important;
+    margin-bottom: 30px !important;
+    text-transform: uppercase;
+    font-size: 25px !important;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+}
+
+.font-size {
+    font-size: 20px;
+}
+
+/*WP Table List column width*/ 
+.wp-list-table .column-id {
+    width: 50px !important; 
+}
+.wp-list-table .column-customer_profile_name {
+    width: 150px !important; 
+}
+
+/* .wp-list-table .column-customer_status_as_per_policy {
+    width: 200px !important; 
+}
+
+.wp-list-table .column-last_load_date {
+    width: 60px !important; 
+}
+
+.wp-list-table .column-customer_state {
+    width: 40px !important; 
+}
+
+.wp-list-table .column-customer_zip {
+    width: 80px !important; 
+}
+
+.wp-list-table .column-customer_phone {
+    width: 90px !important; 
+}
+
+.wp-list-table .column-billing_phone {
+    width: 90px !important; 
+}
+
+.wp-list-table .column-customer_email {
+    width: 150px !important; 
+} */
+

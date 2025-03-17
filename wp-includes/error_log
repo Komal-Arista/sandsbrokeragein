@@ -1,0 +1,4 @@
+[12-Dec-2024 04:30:52 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function is_main_site() in /home/sandsportal/public_html/wp-includes/update.php:1145
+Stack trace:
+#0 {main}
+  thrown in /home/sandsportal/public_html/wp-includes/update.php on line 1145

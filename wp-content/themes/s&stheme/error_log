@@ -1,0 +1,28 @@
+[01-Mar-2025 02:42:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php on line 17
+[01-Mar-2025 02:42:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php on line 17
+[01-Mar-2025 02:42:32 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php on line 17
+[01-Mar-2025 02:43:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php on line 17
+[01-Mar-2025 02:43:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php on line 17
+[01-Mar-2025 02:44:48 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php on line 17
+[01-Mar-2025 02:45:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_header() in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/sandsportal/public_html/wp-content/themes/s&stheme/index.php on line 17
