@@ -1120,14 +1120,7 @@ function get_client_ip() {
 	return $ipaddress;
 }
 
-function restrictedPages() {
-	if(get_client_ip() != '180.151.44.206' && get_client_ip() != '103.229.27.26' && get_client_ip() != '203.193.167.99' && get_client_ip() != '115.247.107.18' && get_client_ip() != '183.177.127.146' && get_client_ip() != '50.184.119.78' && get_client_ip() != '14.195.111.10' && get_client_ip() != '122.176.23.236' && get_client_ip() != '67.83.5.228'){
-	?>
-		<script> location.replace("<?php echo site_url();?>"); </script>
-	<?php
-	}
-}
-add_shortcode('restrictedpages', 'restrictedPages');
+
 
 // Handle User Analytics Logs Page Data
 function handle_user_analytics_ajax() {
