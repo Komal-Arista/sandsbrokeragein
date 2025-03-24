@@ -102,12 +102,13 @@
 						$agent_pageID   = array("935", "899");
 
 						$user = wp_get_current_user();
-						if( !in_array('super_manager', (array) $user->roles) && !in_array('super_admin', (array) $user->roles) ) { ?>
+						if( !in_array('super_manager', (array) $user->roles))
+						{ ?>
 						<style>
 								.super_manager_user_menu{ display:none !important;}
 						</style>
 						<?php }
-						if ( (in_array('manager', (array) $user->roles) || in_array('super_manager', (array) $user->roles) || in_array('super_admin', (array) $user->roles)) && in_array($current_pageID, $manager_pageID) ) {
+						if ( (in_array('manager', (array) $user->roles) || in_array('super_manager', (array) $user->roles)) && in_array($current_pageID, $manager_pageID) ) {
 
 							$defaults = array(
 							'theme_location'  => '',

@@ -15,7 +15,7 @@
 
 		$current_user = wp_get_current_user();
 
-		if ( in_array('agent', (array) $current_user->roles) || in_array('super_manager', (array) $current_user->roles) || in_array('manager', (array) $current_user->roles) || in_array('administrator', (array) $current_user->roles) || in_array('super_admin', (array) $current_user->roles)) {
+		if ( in_array('agent', (array) $current_user->roles) || in_array('super_manager', (array) $current_user->roles) || in_array('manager', (array) $current_user->roles) || in_array('administrator', (array) $current_user->roles) ) {
 
 			//Insert Data in to wp_search_data table
 			$search_data_table_name = $wpdb->prefix . 'search_data';

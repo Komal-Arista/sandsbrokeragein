@@ -12,8 +12,7 @@
     </div>
     
     <div id="successMsg" style="display:none;"></div>
-    <div id="errorMsg" style="display:none;"></div>
-    
+
     <div class="tableusers-responsive">
         <table id="user-table" class="display">
         <thead>

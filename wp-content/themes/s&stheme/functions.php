@@ -691,15 +691,30 @@ $pages = paginate_links( array(
 }
 
 // Add custom roles with custom capability
+
+//Super Admin Role
+function add_sands_super_admin_role() {
+	if (!get_role('super_admin')) {
+		add_role(
+			'super_admin', 
+			__('Super Admin'),
+			array(
+				'read' => true, 
+			)
+		);
+	}
+}
+
+add_action('init', 'add_sands_super_admin_role');
+
 //Super Manager Role
 function add_sands_super_manager_role() {
 	if (!get_role('super_manager')) {
-		// Add a new role called 'Manager' with a custom capability 'upload_csv'
 		add_role(
 			'super_manager', 
 			__('Super Manager'),
 			array(
-				'read' => true,  // Basic capability for reading
+				'read' => true, 
 			)
 		);
 	}
@@ -710,12 +725,11 @@ add_action('init', 'add_sands_super_manager_role');
 //Manager Role
 function add_sands_manager_role() {
 	if (!get_role('manager')) {
-		// Add a new role called 'Manager' with a custom capability 'upload_csv'
 		add_role(
 			'manager', 
 			__('Manager'),
 			array(
-				'read' => true,  // Basic capability for reading
+				'read' => true, 
 			)
 		);
 	}
@@ -730,7 +744,7 @@ function add_sands_agent_role() {
 			'agent', 
 			__('Agent'),
 			array(
-				'read' => true  // Basic capability for reading
+				'read' => true 
 			)
 		);
 	}
@@ -778,7 +792,7 @@ function show_search_page_links_on_account_page() {
 			}
 		
 			// Check if the user has 'Agent' role
-			if ( in_array('agent', (array) $user->roles) ) {
+			if ( in_array('agent', (array) $user->roles) || in_array('manager', (array) $user->roles) || in_array('super_manager', (array) $user->roles) || in_array('super_admin', (array) $user->roles)) {
 			?>
 			<script>
 				jQuery(document).ready(function(){
@@ -791,8 +805,7 @@ function show_search_page_links_on_account_page() {
 			<?php				
 			}
 
-			// Check if the user has 'Super Manager' role
-			if ( in_array('super_manager', (array) $user->roles) ) {
+			if ( in_array('super_manager', (array) $user->roles) || in_array('super_admin', (array) $user->roles)) {
 			?>
 			<script>
 				jQuery(document).ready(function(){
@@ -805,16 +818,11 @@ function show_search_page_links_on_account_page() {
 			<?php				
 			}
 
-			// Check if the user has 'Manager' role OR Super Manager Role
-			if ( in_array('manager', (array) $user->roles) || in_array('super_manager', (array) $user->roles)) {
+			if ( in_array('manager', (array) $user->roles) || in_array('super_manager', (array) $user->roles) || in_array('super_admin', (array) $user->roles)) {
 			?>
 			<script>
 				jQuery(document).ready(function(){
-					jQuery(".um-account-side ul").append('<li id="sns-search-page"><a href="<?php echo site_url("/search/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-search"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-search"></i></span><span class="um-account-title uimob800-hide">Search</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
-					jQuery('#sns-search-page').click(function(){
-					   window.location.href = "<?php echo site_url("/search/"); ?>";
-					});
-
+					
 					jQuery(".um-account-side ul").append('<li id="sns-adv-search-page"><a href="<?php echo site_url("/advance-search/"); ?>" class="um-account-link"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-search-plus"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-search-plus"></i></span><span class="um-account-title uimob800-hide">Advance Search</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-adv-search-page').click(function(){
 					   window.location.href = "<?php echo site_url("/advance-search/"); ?>";
@@ -854,7 +862,10 @@ function show_search_page_links_on_account_page() {
 					jQuery('.um-account-meta-img a').removeAttr('href');
 					jQuery('.um-account-name a').removeAttr('href');
 
-					jQuery('.um-account-name').append('<div class="account-role" style="text-transform: capitalize;"><?php echo esc_html(str_replace('_', ' ', $user->roles[0]))?></div>');
+					var userRole = "<?php echo esc_js(str_replace('_', ' ', $user->roles[0] ?? '')); ?>";
+					if(userRole) {
+						jQuery('.um-account-name').append('<div class="account-role" style="text-transform: capitalize;">' + userRole + '</div>');
+					}
 					jQuery('.um-account-name').append('<div class="account-name"><?php echo esc_html($location_name); ?></div>');
 
 					jQuery(".um-account-side ul").append('<li id="sns-logout"><a href="<?php echo site_url("/logout/"); ?>" class="um-account-link real_url"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-user"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-sign-out"></i></span><span class="um-account-title uimob800-hide">Logout</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
@@ -1135,44 +1146,54 @@ function handle_user_analytics_ajax() {
     // Fetch DataTables parameters
     $page = isset($_GET['start']) ? intval($_GET['start']) : 0;
     $limit = isset($_GET['length']) ? intval($_GET['length']) : 40;
-    $search_value = isset($_GET['search_value']) ? trim($_GET['search_value']) : '';
+    $search_value = isset($_GET['search_value']) ? sanitize_text_field(trim($_GET['search_value'])) : '';
 
     // Calculate offset for pagination
-    $offset = $page;
+    $offset = max(0, $page);
 
-    $where_clause = "1=1"; // Default condition (prevents SQL errors)
+    $where_clause = "1=1"; // Default condition to prevent SQL errors
 
     if (in_array('manager', (array) $current_user->roles)) {
-        $totalAgentUsers = $wpdb->get_results("SELECT agent_id FROM {$table_prefix}agent_manager_relationships 
-            WHERE manager_id = {$current_user->ID}", ARRAY_A);
-        $agent_ids = array_column($totalAgentUsers, 'agent_id');
-        
+        // Get agents assigned to this manager
+        $agent_ids = $wpdb->get_col($wpdb->prepare(
+            "SELECT agent_id FROM {$table_prefix}agent_manager_relationships WHERE manager_id = %d", 
+            $current_user->ID
+        ));
+
         if (!empty($agent_ids)) {
             $agent_ids_str = implode(",", array_map('intval', $agent_ids));
             $where_clause .= " AND s.user_id IN ($agent_ids_str)";
         } else {
-            $where_clause .= " AND 1=0"; // Ensures no results instead of SQL error
+            $where_clause .= " AND 1=0"; // No assigned agents, return no data
         }
     } else if (in_array('super_manager', (array) $current_user->roles)) {
-        $super_manager_location_id = get_user_meta($current_user->ID, 'user_location', true);
+        // Fetch the super manager's location
+        $current_user_location = get_user_meta($current_user->ID, 'user_location', true);
 
-        if ($super_manager_location_id == '4') { // ALL-INDIA Case
-            $totalUsers = $wpdb->get_results("SELECT ID FROM {$table_prefix}users WHERE ID != 1", ARRAY_A);
-            $users_ids = array_column($totalUsers, 'ID');
-        } else { // Location Specific
-            $totalUsers = $wpdb->get_results($wpdb->prepare(
-                "SELECT user_id FROM {$table_prefix}usermeta  
-                WHERE meta_key = 'user_location' AND meta_value = %d", 
-                $super_manager_location_id
-            ), ARRAY_A);
-            $users_ids = array_column($totalUsers, 'user_id');
+        // Fetch all users at the same location, excluding administrator and super_admin
+        $users = get_users([
+            'role__in'   => ['manager', 'agent'], // Only these roles
+            'meta_key'   => 'user_location',
+            'meta_value' => $current_user_location,
+            'fields'     => 'ID', // Get only user IDs
+        ]);
+
+        if (!empty($users)) {
+            $users_ids_str = implode(",", array_map('intval', $users));
+            $where_clause .= " AND s.user_id IN ($users_ids_str)";
+        } else {
+            $where_clause .= " AND 1=0"; // No users at this location
         }
+    } else if (in_array('super_admin', (array) $current_user->roles)) {
+        // Super Admin can see all users (except ID=1, which is usually the main admin account)
+        $totalUsers = $wpdb->get_results("SELECT ID FROM {$table_prefix}users", ARRAY_A);
+        $users_ids = array_column($totalUsers, 'ID');
 
         if (!empty($users_ids)) {
             $users_ids_str = implode(",", array_map('intval', $users_ids));
             $where_clause .= " AND s.user_id IN ($users_ids_str)";
         } else {
-            $where_clause .= " AND 1=0"; // Ensures no results instead of SQL error
+            $where_clause .= " AND 1=0"; // No users found
         }
     } else {
         wp_send_json_error('Unauthorized access');
@@ -1183,20 +1204,19 @@ function handle_user_analytics_ajax() {
     if (!empty($search_value) && strlen($search_value) > 3) {
         $search_value = esc_sql($search_value);
         $where_clause .= $wpdb->prepare(
-			" AND (s.display_name LIKE %s 
-				OR s.user_email LIKE %s 
-				OR s.search_term LIKE %s 
-				OR s.selected_term LIKE %s 
-				OR s.search_page LIKE %s 
-				OR s.location LIKE %s 
-				OR s.date LIKE %s)", 
-			"%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%"
-		);
+            " AND (s.display_name LIKE %s 
+                OR s.user_email LIKE %s 
+                OR s.search_term LIKE %s 
+                OR s.selected_term LIKE %s 
+                OR s.search_page LIKE %s 
+                OR s.location LIKE %s 
+                OR s.date LIKE %s)", 
+            "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%"
+        );
     }
 
     // Get total records
-    $totalRecordsQuery = "SELECT COUNT(*) FROM {$table_prefix}search_data s
-                          WHERE $where_clause";
+    $totalRecordsQuery = "SELECT COUNT(*) FROM {$table_prefix}search_data s WHERE $where_clause";
     $totalRecords = $wpdb->get_var($totalRecordsQuery);
 
     // Get paginated results
@@ -1219,8 +1239,16 @@ function handle_user_analytics_ajax() {
     wp_send_json_success($response);
     exit;
 }
-
-// Hook for logged-in users
 add_action('wp_ajax_user_analytics_data', 'handle_user_analytics_ajax');
+
+
+
+
+
+
+
+
+
+
 
 

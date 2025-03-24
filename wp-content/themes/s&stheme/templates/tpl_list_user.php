@@ -27,7 +27,7 @@
 			<?php
 				if ( is_user_logged_in() ) {
 					$user = wp_get_current_user();
-					if ( in_array('super_manager', (array) $user->roles) ) {
+					if ( in_array('super_manager', (array) $user->roles) || in_array('super_admin', (array) $user->roles) ) {
 			?>
 				<div class="user-list">
                     <?php echo do_shortcode('[user_crud]'); ?>

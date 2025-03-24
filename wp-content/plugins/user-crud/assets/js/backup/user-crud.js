@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
     // Initialize DataTable
     var table = $('#user-table').DataTable({
         "ajax": {
-            "url": uct_manager_vars.ajaxurl,  // Use localized ajaxurl
+            "url": uct_vars.ajaxurl,  // Use localized ajaxurl
             "method": "POST",
             "data": {
                 action: "uct_get_users"
@@ -43,29 +43,24 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.delete-user', function() {
         var userId = $(this).data('id');
         if (confirm('Are you sure you want to delete this user?')) {
+            // Show loader
             $('#loader').show();
-            $('#errorMsg').hide();
             $.ajax({
-                url: uct_manager_vars.ajaxurl, // Use localized ajaxurl
+                url: uct_vars.ajaxurl, // Use localized ajaxurl
                 method: 'POST',
                 data: {
                     action: 'uct_delete_user',
                     user_id: userId
                 },
                 success: function(response) {
-                    //console.log(response);
                     if (response.success) {
+                        // Hide loader
                         $('#loader').hide();
                         table.ajax.reload();
-                        $('#successMsg').text(response.data.message).show();
+                        $('#successMsg').text('User deleted successfully!').show();
                     } else {
-                            $('#loader').hide();
-                            $('#errorMsg').text(response.data.message).show();
-                        }
-                },
-                error: function(xhr) {
-                    $('#loader').hide();
-                    $('#errorMsg').text(xhr.responseText).show();
+                        alert('Error deleting user.');
+                    }
                 }
             });
         }
@@ -82,7 +77,6 @@ jQuery(document).ready(function($) {
         let isValid = true;
 
         // Get form field values
-        const form = $(this);
         const username = $('#username').val().trim();
         const email = $('#email').val().trim();
         const firstName = $('#first_name').val().trim();
@@ -156,7 +150,7 @@ jQuery(document).ready(function($) {
         };
 
         $.ajax({
-            url: uct_manager_vars.ajaxurl, // Use localized ajaxurl (defined in PHP)
+            url: uct_vars.ajaxurl, // Use localized ajaxurl (defined in PHP)
             method: 'POST',
             data: formData,
             success: function(response) {
@@ -164,13 +158,6 @@ jQuery(document).ready(function($) {
                 $('#loader').hide();
                 if (response.success) {
                     $('#successMsg').text('User added successfully!').show();
-
-                    // Reset the form fields after a successful submission
-                    form[0].reset();
-
-                    // Reset dropdowns visibility
-                    toggleManagerDropdown();
-
                     setTimeout(() => {
                         window.location.href = '?action=list';
                     }, 1500); // Reload after 1.5 seconds
@@ -180,14 +167,12 @@ jQuery(document).ready(function($) {
                         $('#usernameError').text(response.data.message).show();
                     } else if(response.data.email){
                         $('#emailError').text(response.data.message).show();
-                    } else if(response.data.location){
-                        $('#locationError').text(response.data.message).show();
                     } else {
                         $('#errorMsg').text(response.data.message).show();
                     }
                 }
             },
-            error: function(xhr) {
+            error: function() {
                 // Hide loader
                 $('#loader').hide();
                 $('#errorMsg').text(xhr.responseText).show();
@@ -214,7 +199,6 @@ jQuery(document).ready(function($) {
         let isValid = true;
 
         // Get form field values
-        const form = $(this);
         const username = $('#username').val().trim();
         const email = $('#email').val().trim();
         const firstName = $('#first_name').val().trim();
@@ -283,7 +267,7 @@ jQuery(document).ready(function($) {
         };
 
         $.ajax({
-            url: uct_manager_vars.ajaxurl, // Use localized ajaxurl
+            url: uct_vars.ajaxurl, // Use localized ajaxurl
             method: 'POST',
             data: formData,
             success: function(response) {
@@ -291,27 +275,18 @@ jQuery(document).ready(function($) {
                     // Hide loader
                     $('#loader').hide();
                     $('#successMsg').text('User edited successfully!').show();
-
-                    // Reset the form fields after a successful submission
-                    form[0].reset();
-
-                    // Reset dropdowns visibility
-                    toggleManagerDropdown();
-
                     setTimeout(() => {
                         window.location.href = '?action=list';
                     }, 1500); // Reload after 1.5 seconds
                 } else {
                     if(response.data.email){
                         $('#emailError').text(response.data.message).show();
-                    } else if(response.data.location){
-                        $('#locationError').text(response.data.message).show();
                     } else {
                         $('#errorMsg').text(response.data.message).show();
                     }
                 }
             },
-            error: function(xhr) {
+            error: function() {
                 // Hide loader
                 $('#loader').hide();
                 $('#errorMsg').text(xhr.responseText).show();
@@ -342,7 +317,11 @@ jQuery(document).ready(function($) {
 
     function toggleManagerDropdown() {
         var selectedRole = $('#role').val();
-        $('#assigned_manager').closest('.equal-col').toggleClass('hidden', selectedRole !== 'agent');
+        if (selectedRole === 'agent') {
+            $('#assigned_manager').parent().show();
+        } else {
+            $('#assigned_manager').parent().hide();
+        }
     }
 
 });

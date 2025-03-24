@@ -122,7 +122,7 @@
 			<?php
 				if ( is_user_logged_in() ) {
 					$user = wp_get_current_user();
-					if ( in_array('manager', (array) $user->roles) || in_array('super_manager', (array) $user->roles) || in_array('administrator', (array) $user->roles) ) {
+					if ( in_array('manager', (array) $user->roles) || in_array('super_manager', (array) $user->roles) || in_array('super_admin', (array) $user->roles) || in_array('administrator', (array) $user->roles) ) {
 			?>
 				<div class="search-box">
 					<input type="text" id="search" placeholder="SEARCH" /> <input type="button" id="search_data" value="Search"><br />

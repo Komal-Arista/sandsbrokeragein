@@ -1,5 +1,5 @@
 <?php
-	/*Template Name: Template - List Customers Data*/
+	/*Template Name: Template - List User*/
 	get_header();
 	$inner_banner_image = get_field('inner_banner_image');
 	$inner_banner_text = get_field('inner_bannr_text');
@@ -27,10 +27,10 @@
 			<?php
 				if ( is_user_logged_in() ) {
 					$user = wp_get_current_user();
-					if ( in_array('super_manager', (array) $user->roles) || in_array('manager', (array) $user->roles) || in_array('super_admin', (array) $user->roles)) {
+					if ( in_array('super_manager', (array) $user->roles) ) {
 			?>
 				<div class="user-list">
-                    <?php echo do_shortcode('[customer_crud]'); ?>
+                    <?php echo do_shortcode('[user_crud]'); ?>
 				</div>
 			<?php
 					} else {

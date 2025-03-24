@@ -57,9 +57,9 @@
 					if ( is_user_logged_in() ) {
 						$current_user = wp_get_current_user();
 
-						if ( in_array('manager', (array) $current_user->roles) || in_array('super_manager', (array) $current_user->roles) || in_array('super_admin', (array) $current_user->roles)) {
+						if ( in_array('manager', (array) $current_user->roles) || in_array('super_manager', (array) $current_user->roles)) {
                             $location_id = get_user_meta($current_user->ID, 'user_location', true);
-                            $show_location = (in_array('super_admin', (array) $current_user->roles)) ? true : false; 
+                            $show_location = (in_array('super_manager', (array) $current_user->roles) && $location_id == '4') ? true : false; 
                     ?>
 				<div class="manager">
 					<table id="manager_agent_list" class="table table-bordered table-hover dt-responsive">
@@ -143,7 +143,7 @@
             }
         ];
 
-        // Add Location column if user is an Super Admin
+        // Add Location column if user is an Super Manager and has location == 4
         if (show_location) {
             columns.splice(6, 0, { 
                 "data": "location",

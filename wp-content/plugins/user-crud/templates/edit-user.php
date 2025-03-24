@@ -1,41 +1,43 @@
 <?php
 
-    global $wpdb;
-    $table_prefix = $wpdb->prefix;
+global $wpdb;
+$table_prefix = $wpdb->prefix;
 
-    // Get user ID from URL parameter
-    $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
-    $user = get_userdata($user_id);
+// Get user ID from URL parameter
+$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
+$user = get_userdata($user_id);
+$user_roles = $user->roles ?? [];
+$user_role = $user_roles[0] ?? '';
 
-    // Get USer Location
-    $current_user_location = get_user_meta( get_current_user_id(), 'user_location', true );
-    
-    $managers = array();
-    if ( $current_user_location ) {
-        $location = $wpdb->get_results("SELECT `name` FROM {$table_prefix}locations WHERE id = {$current_user_location}", ARRAY_A);       
-        $result = 	array_column($location, 'name');
+// Fetch locations efficiently
+$locations = $wpdb->get_results("SELECT id, name FROM {$table_prefix}locations", ARRAY_A);
+$location_map = wp_list_pluck($locations, 'name', 'id');
 
-        // Get all users with the 'manager' role and matching location
-        $managers = get_users(array(
-            'role__in'    => array('manager'),
-            'meta_key'    => 'user_location',
-            'meta_value'  => $current_user_location
-        ));
-    }
+// Get current user location
+$current_user_location = get_user_meta(get_current_user_id(), 'user_location', true);
+$location_name = $location_map[$current_user_location] ?? 'Not Assigned';
 
-    // Check If user role is manager and if any agent has been assigned or not
-    $assigned_agents_count = 0;
-    if ($user->roles[0] == 'manager') {
-        $assigned_agents_count = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT COUNT(agent_id) FROM {$table_prefix}agent_manager_relationships WHERE manager_id = %d",
-                $user_id
-            )
-        );
-    }
+// Fetch managers for the same location
+$managers = [];
+if ($current_user_location) {
+    $managers = get_users([
+        'role__in'    => ['manager'],
+        'meta_key'    => 'user_location',
+        'meta_value'  => $current_user_location
+    ]);
+}
 
-    // Disable select box if assigned_agents_count > 0
-    $disabled = ($assigned_agents_count > 0) ? 'disabled' : '';
+// Check if user is a manager and has assigned agents
+$assigned_agents_count = ($user_role === 'manager') ? (int) $wpdb->get_var(
+    $wpdb->prepare(
+        "SELECT COUNT(agent_id) FROM {$table_prefix}agent_manager_relationships WHERE manager_id = %d",
+        $user_id
+    )
+) : 0;
+
+// Disable role selection if agents are assigned
+$disabled = ($assigned_agents_count > 0) ? 'disabled' : '';
+
 ?>
 
 <div class="edit-user-logs edit-flexrow">
@@ -94,7 +96,7 @@
             <div class="equal-col">
                 <div class="form-group">
                     <label for="password">Location</label>
-                    <input type="text" id="location" name="location" value="<?php echo $result[0]; ?>" class="control-form" autocomplete="off" readonly>
+                    <input type="text" id="location" name="location" value="<?php echo $location_name; ?>" class="control-form" autocomplete="off" readonly>
                 </div>
             </div>
 
@@ -113,22 +115,21 @@
                 </div>
             </div>
 
-            <div class="equal-col">
+            <div class="equal-col hidden">
                 <div class="form-group">    
                     <label for="role">Select Manager</label>
                     <select name="assigned_manager" id="assigned_manager" class="control-form control-select">
-                        <option value="" disabled selected><?php _e( 'Select Manager', 'textdomain' ); ?></option>
-                            <?php foreach ( $managers as $manager ) : 
-                                // Skip the current edited user
+                        <option value="" disabled selected><?php _e('Select Manager', 'textdomain'); ?></option>
+                            <?php foreach ($managers as $manager) : 
                                 if ($user_id == $manager->ID) {
                                     continue; // Skip this iteration
-                                }
+                                }    
                             ?>
-                        <option value="<?php echo esc_attr( $manager->ID ); ?>" 
-                            <?php selected( $user->assigned_manager, $manager->ID ); ?>>
-                            <?php echo esc_html( $manager->first_name . " " . $manager->last_name  . ' (' . $manager->display_name . ')' ); ?>
-                        </option>
-                            <?php endforeach; ?>
+                            <option value="<?php echo esc_attr($manager->ID); ?>"
+                                <?php selected( $user->assigned_manager, $manager->ID ); ?>>
+                                <?php echo esc_html("{$manager->first_name} {$manager->last_name} (" . ($location_map[$manager->user_location] ?? 'Not Assigned') . ")"); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                     <span id="managerError" class="error" style="display: none; color: red;"></span>
                 </div>

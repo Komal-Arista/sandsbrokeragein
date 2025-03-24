@@ -1,5 +1,5 @@
 <?php
-	/*Template Name: Template - Limited Search*/
+	/*Template Name: Template - Advance Search*/
 	get_header();
 	$inner_banner_image = get_field('inner_banner_image');
 	$inner_banner_text = get_field('inner_bannr_text');
@@ -39,10 +39,10 @@
 	.adv-search-result .search-box ul.carrier-list li { text-align:left; padding:5px 0 5px 15px; border-bottom:1px solid #e8e8e8;}
 	.adv-search-result .search-box ul.carrier-list li:last-child { border-bottom:0;}
 	.adv-search-result { background:#f1f1f1; padding:60px 0; min-height:600px;}
-	.adv-search-result #carrier-data ul { border:1px solid #c7c7c7; margin-top:0; width:100%; max-width:1000px; background:#fff; box-shadow:0 0 10px #c7c7c7; padding:0; border-radius:0; margin-left:auto; margin-right:auto; display:flex; flex-wrap:wrap;}
+	.adv-search-result #carrier-data ul { border:1px solid #c7c7c7; margin-top:0; width:100%; max-width:1435px; background:#fff; box-shadow:0 0 10px #c7c7c7; padding:0; border-radius:0; margin-left:auto; margin-right:auto; display:flex; flex-wrap:wrap;}
 	.adv-search-result #carrier-data ul li { vertical-align:top; display:inline-block; border-bottom:1px solid #c7c7c7; padding:10px;}
-	.adv-search-result #carrier-data ul li.cd-left { width:30%; background:#ebebeb; text-align:right; font-weight:500; border-right:1px solid #c7c7c7; border-left:1px solid #c7c7c7; line-height:22px;}
-	.adv-search-result #carrier-data ul li.cd-right { width:70%; line-height:22px;}
+	.adv-search-result #carrier-data ul li.cd-left { width:20%; background:#ebebeb; text-align:right; font-weight:500; border-right:1px solid #c7c7c7; border-left:1px solid #c7c7c7; line-height:22px;}
+	.adv-search-result #carrier-data ul li.cd-right { width:30%; line-height:22px;}
 	.adv-srch-banner-only .banbx_inn { padding-left:15px; padding-right:15px;}
 	.adv-search-result p.cerror { text-align:center; border:1px solid red; padding:10px !important; font-weight:600;}
 
@@ -60,8 +60,8 @@
 	@media screen and (max-width: 991px) {
 		.adv-srch-banner-only { margin-top:70px;}
 		.adv-srch-banner-only .inner_banner img { height:310px;}
-		.adv-search-result #carrier-data ul li.cd-left { width:36%;}
-		.adv-search-result #carrier-data ul li.cd-right { width:64%;}
+		.adv-search-result #carrier-data ul li.cd-left {width:35%;}
+		.adv-search-result #carrier-data ul li.cd-right {width:65%;}
 	}
 
 	@media screen and (max-width: 819px) {
@@ -69,6 +69,8 @@
 	}
 
 	@media screen and (max-width: 767px) {
+		.adv-search-result #carrier-data ul li.cd-left {width:45%;}
+		.adv-search-result #carrier-data ul li.cd-right {width:55%;}
 		.adv-search-result { min-height:300px;}
 	}
 
@@ -85,8 +87,8 @@
 		.adv-search-result .search-box ul.carrier-list li a { font-size:16px;}
 		.adv-search-result { padding:30px 0;}
 		.adv-search-result #carrier-data ul { display:flex; flex-wrap:wrap;}
-		.adv-search-result #carrier-data ul li.cd-left { border-right:0;}
-		.adv-search-result #carrier-data ul li.cd-right { word-wrap:break-word;}
+		.adv-search-result #carrier-data ul li.cd-left { width:40%; border-right:0;}
+		.adv-search-result #carrier-data ul li.cd-right { width:60%; word-wrap:break-word;}
 		.adv-search-result #carrier-data ul li.cd-left, .adv-search-result #carrier-data ul li.cd-right { line-height:18px;}
 		.adv-search-result .search-box #search {padding:5px 10px 5px 38px;}
 		.adv-search-result .search-box #search_data { padding:5px 5px 5px 5px;}
@@ -95,8 +97,6 @@
 
 	@media screen and (max-width: 479px) {
 		.adv-search-result #carrier-data ul li.cd-left, .adv-search-result #carrier-data ul li.cd-right { font-size:14px;}
-		.adv-search-result #carrier-data ul li.cd-left { width:40%;}
-		.adv-search-result #carrier-data ul li.cd-right { width:60%;}
 	}
 
 	@media screen and (max-width: 359px) {
@@ -122,7 +122,7 @@
 			<?php
 				if ( is_user_logged_in() ) {
 					$user = wp_get_current_user();
-					if ( in_array('agent', (array) $user->roles) || in_array('super_manager', (array) $user->roles) || in_array('manager', (array) $user->roles) || in_array('administrator', (array) $user->roles) || in_array('super_admin', (array) $user->roles)) {
+					if ( in_array('manager', (array) $user->roles) || in_array('super_manager', (array) $user->roles) || in_array('administrator', (array) $user->roles) ) {
 			?>
 				<div class="search-box">
 					<input type="text" id="search" placeholder="SEARCH" /> <input type="button" id="search_data" value="Search"><br />
@@ -136,6 +136,7 @@
 					echo '<p class="cerror">You must be logged in to view this page.</p>';
 				}
 			?>
+
 				<script>
 					/* Code to disable select and copy content, right click, F12 key and Ctr + u key */
 					document.addEventListener('contextmenu', event => event.preventDefault());
@@ -167,18 +168,33 @@
 								}
 							});
 						}
-
-						var cp_name = customer_profile_name.replace(/`/g, "'");
-
-						var carrier_data = '';
 						
-						carrier_data += '<ul class="carrier-data-main">';
-						carrier_data += '<li class="cd-left">Customer Profile Name:</li><li class="cd-right">'+cp_name+'</li>';
-						carrier_data += '<li class="cd-left">Customer Status As Per Policy:</li><li class="cd-right">'+customer_status_as_per_policy+'</li>';
-						carrier_data += '<li class="cd-left">Customer State:</li><li class="cd-right">'+customer_state+'</li>';
-						carrier_data += '<li class="cd-left">Last Load Date (MM/DD/YYYY):</li><li class="cd-right">'+last_load_date+'</li>';
-						carrier_data += '<li class="cd-left">Region:</li><li class="cd-right">'+region+'</li>';
-						carrier_data += '</ul>';
+						if(customer_profile_name.includes("'")){
+							var cp_name = customer_profile_name.replace(/`/g, "'");
+						} else if(customer_profile_name.includes('"')){
+							var cp_name = customer_profile_name.replace(/`/g, '"');
+						} else {
+							var cp_name = customer_profile_name;
+						}
+
+						var carrier_data = "";
+
+						carrier_data += "<ul class='carrier-data-main'>";
+						carrier_data += "<li class='cd-left'>Customer Profile Name:</li><li class='cd-right'>"+cp_name+"</li>";
+						carrier_data += "<li class='cd-left'>Customer Status:</li><li class='cd-right'>"+customer_status+"</li>";
+						carrier_data += "<li class='cd-left'>Customer Status As Per Policy:</li><li class='cd-right'>"+customer_status_as_per_policy+"</li>";
+						carrier_data += "<li class='cd-left'>Last Load Date (MM/DD/YYYY):</li><li class='cd-right'>"+last_load_date+"</li>";
+						carrier_data += "<li class='cd-left'>Customer Contact Name:</li><li class='cd-right'>"+customer_contact_name+"</li>";
+						carrier_data += "<li class='cd-left'>Customer City:</li><li class='cd-right'>"+customer_city+"</li>";
+						carrier_data += "<li class='cd-left'>Customer State:</li><li class='cd-right'>"+customer_state+"</li>";
+						carrier_data += "<li class='cd-left'>Customer Zip:</li><li class='cd-right'>"+customer_zip+"</li>";
+						carrier_data += "<li class='cd-left'>Customer Phone:</li><li class='cd-right'>"+customer_phone+"</li>";
+						carrier_data += "<li class='cd-left'>Billing Phone:</li><li class='cd-right'>"+billing_phone+"</li>";
+						carrier_data += "<li class='cd-left'>Customer Email:</li><li class='cd-right'>"+customer_email+"</li>";
+						carrier_data += "<li class='cd-left'>Customer Website Url:</li><li class='cd-right'>"+customer_website_url+"</li>";
+						carrier_data += "<li class='cd-left'>Sales Rep Name:</li><li class='cd-right'>"+sales_rep_name+"</li>";
+						carrier_data += "<li class='cd-left'>Region:</li><li class='cd-right'>"+region+"</li>";
+						carrier_data += "</ul>";
 						
 						$('#search').val(cp_name);
 						$('#display').hide();
@@ -189,7 +205,8 @@
 					$(document).ready(function() {
 						function searchCarrierData(keyevent, searchterm){
 							var search_data = searchterm;
-							var page = "search"; // search page
+							var page = "advance search"; //advance-search page
+
 							if( keyevent == 13 || keyevent == 'buttonclick' ) {
 								if( search_data.length > 2) {
 									if (search_data == "") {

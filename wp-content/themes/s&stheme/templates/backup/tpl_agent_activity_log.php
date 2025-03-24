@@ -57,69 +57,70 @@
 
 				// Check if the user is logged in
 				if (is_user_logged_in()) {
-					global $wpdb;
 					$current_user = wp_get_current_user();
-					$current_user_roles = (array) $current_user->roles;
+					$current_user_roles = (array)$current_user->roles;
 					$current_user_location_id = get_user_meta($current_user->ID, 'user_location', true);
 					$users = [];
-					$show_location = in_array('super_admin', $current_user_roles) ? true : false;
-				
-					if (in_array('manager', $current_user_roles) || in_array('super_manager', $current_user_roles) || in_array('super_admin', $current_user_roles)) {
+
+					// Check if the user has the required roles
+					if (in_array('manager', $current_user_roles) || in_array('super_manager', $current_user_roles)) {
+						// Define query logic based on user roles
 						$query = '';
-				
-						if (in_array('super_admin', $current_user_roles)) { // Super Admin: Fetch all users
-							$query = "SELECT u.ID, u.display_name, u.user_email, s.id, s.created_on, s.client_ip, s.event_type, s.user_roles, um.meta_value AS location
-									  FROM {$wpdb->users} u
-									  LEFT JOIN {$wpdb->prefix}usermeta um ON u.ID = um.user_id AND um.meta_key = 'user_location'
-									  INNER JOIN {$wpdb->prefix}wsal_occurrences s ON u.ID = s.user_id
-									  WHERE u.ID != 1
-									  ORDER BY s.id DESC";
-						} elseif (in_array('super_manager', $current_user_roles)) { // Super Manager: Fetch agents and managers from the same location
-							$users = get_users([
-								'role__in'    => ['manager', 'agent'],
-								'meta_key'    => 'user_location',
-								'meta_value'  => $current_user_location_id,
-								'fields'      => 'ID'
-							]);
-				
-							if (!empty($users)) {
-								$placeholders = implode(',', array_fill(0, count($users), '%d'));
-								$query = $wpdb->prepare(
-									"SELECT u.ID, u.display_name, u.user_email, s.id, s.created_on, s.client_ip, s.event_type, s.user_roles, um.meta_value AS location
-									 FROM {$wpdb->users} u
-									 LEFT JOIN {$wpdb->prefix}usermeta um ON u.ID = um.user_id AND um.meta_key = 'user_location'
-									 INNER JOIN {$wpdb->prefix}wsal_occurrences s ON u.ID = s.user_id
-									 WHERE u.ID IN ($placeholders)
-									 ORDER BY s.id DESC",
-									$users
-								);
-							}
-						} elseif (in_array('manager', $current_user_roles)) { // Manager: Fetch only assigned agents
+						if (in_array('super_manager', $current_user_roles)) {
+								if ($current_user_location_id == '4') { // Super Manager with India-All location
+									$query = "SELECT u.ID, u.display_name, u.user_email, s.id, s.created_on, s.client_ip, s.event_type, s.user_roles, um.meta_value AS location
+											FROM {$wpdb->users} u
+											LEFT JOIN {$wpdb->prefix}usermeta um ON u.ID = um.user_id AND um.meta_key = 'user_location'
+											INNER JOIN {$table_prefix}wsal_occurrences s ON u.ID = s.user_id
+											WHERE u.ID != 1
+											ORDER BY s.id DESC";
+								} else { // Super Manager with specific location
+									$user_ids = $wpdb->get_col(
+										$wpdb->prepare(
+											"SELECT user_id 
+											FROM {$table_prefix}usermeta 
+											WHERE meta_key = 'user_location' AND meta_value = %s", 
+											$current_user_location_id
+										)
+									);
+									if (!empty($user_ids)) {
+										$placeholders = implode(',', array_fill(0, count($user_ids), '%d'));
+										$query = $wpdb->prepare(
+											"SELECT u.ID, u.display_name, u.user_email, s.id, s.created_on, s.client_ip, s.event_type, s.user_roles
+											FROM {$wpdb->users} u
+											INNER JOIN {$table_prefix}wsal_occurrences s ON u.ID = s.user_id
+											WHERE u.ID IN ($placeholders)
+											ORDER BY s.id DESC",
+											$user_ids
+										);
+									}
+								}
+						} elseif (in_array('manager', $current_user_roles)) { // Manager
 							$agent_ids = $wpdb->get_col(
 								$wpdb->prepare(
-									"SELECT agent_id FROM {$wpdb->prefix}agent_manager_relationships WHERE manager_id = %d",
+									"SELECT agent_id 
+									FROM {$table_prefix}agent_manager_relationships 
+									WHERE manager_id = %d", 
 									$current_user->ID
 								)
 							);
-				
 							if (!empty($agent_ids)) {
 								$placeholders = implode(',', array_fill(0, count($agent_ids), '%d'));
 								$query = $wpdb->prepare(
-									"SELECT u.ID, u.display_name, u.user_email, s.id, s.created_on, s.client_ip, s.event_type, s.user_roles, um.meta_value AS location
-									 FROM {$wpdb->users} u
-									 LEFT JOIN {$wpdb->prefix}usermeta um ON u.ID = um.user_id AND um.meta_key = 'user_location'
-									 INNER JOIN {$wpdb->prefix}wsal_occurrences s ON u.ID = s.user_id
-									 WHERE u.ID IN ($placeholders)
-									 ORDER BY s.id DESC",
+									"SELECT u.ID, u.display_name, u.user_email, s.id, s.created_on, s.client_ip, s.event_type, s.user_roles
+									FROM {$wpdb->users} u
+									INNER JOIN {$table_prefix}wsal_occurrences s ON u.ID = s.user_id
+									WHERE u.ID IN ($placeholders)
+									ORDER BY s.id DESC",
 									$agent_ids
 								);
 							}
 						}
-				
+
+						// Fetch users if a query is defined
 						if (!empty($query)) {
 							$users = $wpdb->get_results($query);
 						}
-						
 						// echo "<pre>";
 						// print_r($users);
 						// echo "</pre>"; die;
@@ -136,7 +137,9 @@
 										<th>Details</th>
 										<th>Created On</th>
 										<th>Client IP</th>
-										<?php if($show_location) { ?><th>Location</th> <?php } ?>
+										<?php if (in_array('super_manager', $current_user_roles) && $current_user_location_id == '4') : ?>
+											<th>Location</th>
+										<?php endif; ?>
 									</tr>
 								</thead>
 								<tbody>
@@ -250,16 +253,13 @@
 												</td>
 												<td><?php echo $formatted_date;?></td>
 												<td><?php echo esc_html($user->client_ip); ?></td>
-												<?php if ($show_location) : ?>
-													<td>
-														<?php 
-														$location = $wpdb->get_var($wpdb->prepare(
-															"SELECT name FROM {$table_prefix}locations WHERE id = %d",
-															$user->location
-														));
-														echo !empty($location) ? esc_html($location) : "N/A"; 
-														?>
-                                					</td>
+												<?php if (in_array('super_manager', $current_user_roles) && $current_user_location_id == '4') : 
+													$location = $wpdb->get_results("SELECT `name` FROM {$table_prefix}locations 
+                                            										WHERE id = {$user->location}", ARRAY_A);
+											
+													$location_name = 	array_column($location, 'name');
+												?>
+													<td><?php echo !empty($location_name) ? esc_html($location_name[0]) : "N/A"; ?></td>
 												<?php endif; ?>
 											</tr>
 											<?php

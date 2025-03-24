@@ -24,6 +24,7 @@
     }
 
     // Check If user role is manager and if any agent has been assigned or not
+    $assigned_agents_count = 0;
     if ($user->roles[0] == 'manager') {
         $assigned_agents_count = $wpdb->get_var(
             $wpdb->prepare(
@@ -35,7 +36,6 @@
 
     // Disable select box if assigned_agents_count > 0
     $disabled = ($assigned_agents_count > 0) ? 'disabled' : '';
-    
 ?>
 
 <div class="edit-user-logs edit-flexrow">
@@ -107,7 +107,9 @@
                         <option value="manager" <?php echo ($user->roles[0] == 'manager') ? 'selected' : ''; ?>>Manager</option>
                     </select>
                     <span id="roleError" class="error" style="display: none; color: red;"></span>
-                    <small id="msgAgents">You cannot change the role of this user until you unassign all agents from this manager.</small>
+                    <?php if($assigned_agents_count > 0) { ?>
+                        <small>You cannot change the role of this user until you unassign all agents from this manager.</small>
+                    <?php } ?>
                 </div>
             </div>
 

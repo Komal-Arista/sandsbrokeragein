@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
     // Initialize DataTable
     var table = $('#user-table').DataTable({
         "ajax": {
-            "url": uct_vars.ajaxurl,  // Use localized ajaxurl
+            "url": uct_admin_vars.ajaxurl,  // Use localized ajaxurl
             "method": "POST",
             "data": {
                 action: "uct_get_users"
@@ -43,31 +43,36 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.delete-user', function() {
         var userId = $(this).data('id');
         if (confirm('Are you sure you want to delete this user?')) {
-            // Show loader
             $('#loader').show();
+            $('#errorMsg').hide();
             $.ajax({
-                url: uct_vars.ajaxurl, // Use localized ajaxurl
+                url: uct_admin_vars.ajaxurl, // Use localized ajaxurl
                 method: 'POST',
                 data: {
                     action: 'uct_delete_user',
                     user_id: userId
                 },
                 success: function(response) {
+                    //console.log(response);
                     if (response.success) {
-                        // Hide loader
                         $('#loader').hide();
                         table.ajax.reload();
-                        $('#successMsg').text('User deleted successfully!').show();
+                        $('#successMsg').text(response.data.message).show();
                     } else {
-                        alert('Error deleting user.');
-                    }
+                            $('#loader').hide();
+                            $('#errorMsg').text(response.data.message).show();
+                        }
+                },
+                error: function(xhr) {
+                    $('#loader').hide();
+                    $('#errorMsg').text(xhr.responseText).show();
                 }
             });
         }
     });
-
+    
     // Add user form submission
-    $('#add-user-form').on('submit', function(e) {
+    $('#add-super-user-form').on('submit', function(e) {
         e.preventDefault();
 
         // Clear all previous error messages
@@ -77,13 +82,16 @@ jQuery(document).ready(function($) {
         let isValid = true;
 
         // Get form field values
+        const form = $(this);
         const username = $('#username').val().trim();
         const email = $('#email').val().trim();
-        const firstName = $('#first_name').val().trim();
-        const lastName = $('#last_name').val().trim();
+        const first_name = $('#first_name').val().trim();
+        const last_name = $('#last_name').val().trim();
         const password = $('#password').val().trim();
-        const role = $('#role').val();
-        const manager = $('#assigned_manager').val();
+        const admin_location = $('#admin_location').val();
+        const user_role = $('#user_role').val();
+        const manager = $('#user_assigned_manager').val();
+        const super_manager = $('#assigned_super_manager').val();
 
         // Validate username
         if (username.length < 3) {
@@ -99,13 +107,13 @@ jQuery(document).ready(function($) {
         }
 
         // Validate first name
-        if (firstName === '') {
+        if (!first_name) {
             isValid = false;
             $('#firstNameError').text('First name is required.').show();
         }
 
         // Validate last name
-        if (lastName === '') {
+        if (!last_name) {
             isValid = false;
             $('#lastNameError').text('Last name is required.').show();
         }
@@ -116,16 +124,28 @@ jQuery(document).ready(function($) {
             $('#passwordError').text('Password must be at least 6 characters long.').show();
         }
 
-        // Validate role
-        if (role === null || role === '') {
+        // Validate location
+        if (!admin_location) {
             isValid = false;
-            $('#roleError').text('Please select a role.').show();
+            $('#locationError').text('Please select a location.').show();
         }
 
         // Validate role
-        if (role == 'agent' && (manager === null || manager === '')) {
+        if (!user_role) {
+            isValid = false;
+            $('#userRoleError').text('Please select a role.').show();
+        }
+
+        // Validate agent role
+        if (user_role == 'agent' && !manager) {
             isValid = false;
             $('#managerError').text('Please select a manager.').show();
+        }
+
+        // Validate manager role
+        if (user_role == 'manager' && !super_manager) {
+            isValid = false;
+            $('#superManagerError').text('Please select a super manager.').show();
         }
 
         // Stop submission if validation fails
@@ -138,19 +158,21 @@ jQuery(document).ready(function($) {
 
         // Prepare data for AJAX request
         var formData = {
-            action: 'uct_add_user', // The action we are hooking into
-            username: $('#username').val(),
-            email: $('#email').val(),
-            first_name: $('#first_name').val(),
-            last_name: $('#last_name').val(),
-            password: $('#password').val(),
-            role: $('#role').val(),
-            assigned_manager: $('#assigned_manager').val(),
-            uct_nonce: $('#uct_nonce').val()  // Include nonce for security
+            action: 'uct_super_admin_add_user',
+            username: username,
+            email: email,  
+            first_name: first_name, 
+            last_name: last_name,  
+            password: password,
+            location: admin_location,
+            role: user_role,
+            assigned_manager: manager,
+            assigned_super_manager: super_manager,
+            uct_nonce: $('#uct_nonce').val()
         };
 
         $.ajax({
-            url: uct_vars.ajaxurl, // Use localized ajaxurl (defined in PHP)
+            url: uct_admin_vars.ajaxurl, // Use localized ajaxurl (defined in PHP)
             method: 'POST',
             data: formData,
             success: function(response) {
@@ -158,28 +180,38 @@ jQuery(document).ready(function($) {
                 $('#loader').hide();
                 if (response.success) {
                     $('#successMsg').text('User added successfully!').show();
+
+                    // Reset the form fields after a successful submission
+                    form[0].reset();
+
+                    // Reset dropdowns visibility
+                    toggleUserManagerDropdown();
+
                     setTimeout(() => {
                         window.location.href = '?action=list';
                     }, 1500); // Reload after 1.5 seconds
 
                 } else {
+                    // Hide loader
+                    $('#loader').hide();
                     if(response.data.username){
                         $('#usernameError').text(response.data.message).show();
                     } else if(response.data.email){
                         $('#emailError').text(response.data.message).show();
+                    } else if(response.data.location){
+                        $('#locationError').text(response.data.message).show();
                     } else {
                         $('#errorMsg').text(response.data.message).show();
                     }
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 // Hide loader
                 $('#loader').hide();
                 $('#errorMsg').text(xhr.responseText).show();
             }
         });
     });
-
 
     // Click on Edit button
     $(document).on('click', '.edit-user', function() {
@@ -189,7 +221,7 @@ jQuery(document).ready(function($) {
 
 
     // Edit user form submission
-    $('#edit-user-form').on('submit', function(e) {
+    $('#edit-super-user-form').on('submit', function(e) {
         e.preventDefault();
 
         // Clear all previous error messages
@@ -199,13 +231,22 @@ jQuery(document).ready(function($) {
         let isValid = true;
 
         // Get form field values
+        const form = $(this);
         const username = $('#username').val().trim();
         const email = $('#email').val().trim();
-        const firstName = $('#first_name').val().trim();
-        const lastName = $('#last_name').val().trim();
+        const first_name = $('#first_name').val().trim();
+        const last_name = $('#last_name').val().trim();
         const password = $('#password').val().trim();
-        const role = $('#role').val();
-        const manager = $('#assigned_manager').val();
+        const admin_location = $('#admin_location').val();
+        const user_role = $('#user_role').val();
+        const manager = $('#user_assigned_manager').val();
+        const super_manager = $('#assigned_super_manager').val();
+
+        // Validate username
+        if (username.length < 3) {
+            isValid = false;
+            $('#usernameError').text('Username must be at least 3 characters long.').show();
+        }
 
         // Validate email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -215,13 +256,13 @@ jQuery(document).ready(function($) {
         }
 
         // Validate first name
-        if (firstName === '') {
+        if (!first_name) {
             isValid = false;
             $('#firstNameError').text('First name is required.').show();
         }
 
         // Validate last name
-        if (lastName === '') {
+        if (!last_name) {
             isValid = false;
             $('#lastNameError').text('Last name is required.').show();
         }
@@ -232,16 +273,28 @@ jQuery(document).ready(function($) {
             $('#passwordError').text('Password must be at least 6 characters long.').show();
         }
 
-        // Validate role
-        if (role === null || role === '') {
+        // Validate location
+        if (!admin_location) {
             isValid = false;
-            $('#roleError').text('Please select a role.').show();
+            $('#locationError').text('Please select a location.').show();
         }
 
-         // Validate role
-         if (role == 'agent' && (manager === null || manager === '')) {
+        // Validate role
+        if (!user_role) {
+            isValid = false;
+            $('#userRoleError').text('Please select a role.').show();
+        }
+
+        // Validate agent role
+        if (user_role == 'agent' && !manager) {
             isValid = false;
             $('#managerError').text('Please select a manager.').show();
+        }
+
+        // Validate manager role
+        if (user_role == 'manager' && !super_manager) {
+            isValid = false;
+            $('#superManagerError').text('Please select a super manager.').show();
         }
 
         // Stop submission if validation fails
@@ -254,20 +307,22 @@ jQuery(document).ready(function($) {
 
         // Prepare data for AJAX request
         var formData = {
-            action: 'uct_update_user', // The action we are hooking into
+            action: 'uct_super_admin_update_user', // The action we are hooking into
             user_id: $('#user_id').val(),
-            username: $('#username').val(),
-            email: $('#email').val(),
-            first_name: $('#first_name').val(),
-            last_name: $('#last_name').val(),
-            password: $('#password').val(),
-            role: $('#role').val(),
-            assigned_manager: $('#assigned_manager').val(),
+            username: username,
+            email: email,  
+            first_name: first_name, 
+            last_name: last_name,  
+            password: password,
+            location: admin_location,
+            role: user_role,
+            assigned_manager: manager,
+            assigned_super_manager: super_manager,
             uct_nonce: $('#uct_nonce').val()  // Include nonce for security
         };
 
         $.ajax({
-            url: uct_vars.ajaxurl, // Use localized ajaxurl
+            url: uct_admin_vars.ajaxurl, // Use localized ajaxurl
             method: 'POST',
             data: formData,
             success: function(response) {
@@ -275,18 +330,29 @@ jQuery(document).ready(function($) {
                     // Hide loader
                     $('#loader').hide();
                     $('#successMsg').text('User edited successfully!').show();
+
+                    // Reset the form fields after a successful submission
+                    form[0].reset();
+
+                    // Reset dropdowns visibility
+                    toggleUserManagerDropdown();
+
                     setTimeout(() => {
                         window.location.href = '?action=list';
                     }, 1500); // Reload after 1.5 seconds
                 } else {
+                    // Hide loader
+                    $('#loader').hide();
                     if(response.data.email){
                         $('#emailError').text(response.data.message).show();
+                    } else if(response.data.location){
+                        $('#locationError').text(response.data.message).show();
                     } else {
                         $('#errorMsg').text(response.data.message).show();
                     }
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 // Hide loader
                 $('#loader').hide();
                 $('#errorMsg').text(xhr.responseText).show();
@@ -308,22 +374,18 @@ jQuery(document).ready(function($) {
     });
 
     // Run on page load
-    toggleManagerDropdown();
+    toggleUserManagerDropdown();
 
     // Run when role selection changes
-    $('#role').change(function() {
-        toggleManagerDropdown();
+    $('#user_role').change(function() { 
+        toggleUserManagerDropdown();
     });
 
-    function toggleManagerDropdown() {
-        var selectedRole = $('#role').val();
-        if (selectedRole === 'agent') {
-            $('#assigned_manager').parent().show();
-            $('#msgAgents').hide();
-        } else {
-            $('#assigned_manager').parent().hide();
-            $('#msgAgents').show();
-        }
+    function toggleUserManagerDropdown() {
+        var selectedRole = $('#user_role').val();
+    
+        $('#user_assigned_manager').closest('.equal-col').toggleClass('hidden', selectedRole !== 'agent');
+        $('#assigned_super_manager').closest('.equal-col').toggleClass('hidden', selectedRole !== 'manager');
     }
-
+    
 });
