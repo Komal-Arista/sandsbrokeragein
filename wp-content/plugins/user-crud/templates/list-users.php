@@ -25,7 +25,7 @@
                 <th>Role</th>
                 <th>Assigned Manager</th>
                 <th>Location</th>
-                <th>Actions</th>
+                <th width="106px">Actions</th>
             </tr>
         </thead>
         <tbody>

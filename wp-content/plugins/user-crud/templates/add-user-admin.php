@@ -20,6 +20,7 @@
     <div id="successMsg" style="display:none;"></div>
     <div id="errorMsg" style="display:none;"></div>
     <a href="<?php echo get_site_url(); ?>/list-user" class="button-primary">Users List</a>
+    <a href="<?php echo get_site_url();?>/account" class="button-primary">My Account</a>
     
     <form id="add-super-user-form" class="flexrow">
         <!-- Add nonce field for security -->

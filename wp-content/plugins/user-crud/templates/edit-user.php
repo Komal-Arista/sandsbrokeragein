@@ -46,6 +46,7 @@ $disabled = ($assigned_agents_count > 0) ? 'disabled' : '';
         <div id="successMsg" style="display:none;"></div>
         <div id="errorMsg" style="display:none;"></div>
         <a href="<?php echo get_site_url(); ?>/list-user" class="button-primary">Users List</a>
+        <a href="<?php echo get_site_url();?>/account" class="button-primary">My Account</a>
 
         <form id="edit-user-form" class="flexrow">
             <!-- Add nonce field for security -->
@@ -110,7 +111,7 @@ $disabled = ($assigned_agents_count > 0) ? 'disabled' : '';
                     </select>
                     <span id="roleError" class="error" style="display: none; color: red;"></span>
                     <?php if($assigned_agents_count > 0) { ?>
-                        <small>You cannot change the role of this user until you unassign all agents from this manager.</small>
+                        <small>You cannot change this user's role until all subordinates are unassigned from this manager.</small>
                     <?php } ?>
                 </div>
             </div>

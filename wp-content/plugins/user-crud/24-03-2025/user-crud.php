@@ -68,30 +68,27 @@ function uct_get_users() {
     $user_roles = get_userdata($current_user_id)->roles;
     $current_user_location = get_user_meta($current_user_id, 'user_location', true);
 
-     // Base SQL query to fetch users (excluding the current user)
+    // Base SQL query to fetch users (excluding the current user)
     $base_query = "SELECT u.ID, u.user_login, u.user_email, 
-            um_first.meta_value AS first_name,
-            um_last.meta_value AS last_name,
-            um_assigned_manager.meta_value AS assigned_manager,
-            um_role.meta_value AS wp_capabilities,
-            l.name AS user_location
-                FROM {$wpdb->users} u
-                LEFT JOIN {$wpdb->usermeta} um_first 
-                ON u.ID = um_first.user_id AND um_first.meta_key = 'first_name'
-                LEFT JOIN {$wpdb->usermeta} um_last 
-                ON u.ID = um_last.user_id AND um_last.meta_key = 'last_name'
-                LEFT JOIN {$wpdb->usermeta} um_assigned_manager 
-                ON u.ID = um_assigned_manager.user_id AND um_assigned_manager.meta_key = 'assigned_manager'
-                LEFT JOIN {$wpdb->usermeta} um_role 
-                ON u.ID = um_role.user_id AND um_role.meta_key = 'wp_capabilities'
-                LEFT JOIN {$wpdb->usermeta} um_location
-                ON u.ID = um_location.user_id AND um_location.meta_key = 'user_location'
-                LEFT JOIN {$wpdb->usermeta} um_status
-                ON u.ID = um_status.user_id AND um_status.meta_key = 'account_status'
-                LEFT JOIN wp_locations l 
-                ON um_location.meta_value = l.id
-                WHERE u.ID != %d 
-                AND um_status.meta_value = 'approved'"; // Fetch only approved users and Exclude current user
+                        um_first.meta_value AS first_name,
+                        um_last.meta_value AS last_name,
+                        um_assigned_manager.meta_value AS assigned_manager,
+                        um_role.meta_value AS wp_capabilities,
+                        l.name AS user_location
+                   FROM $wpdb->users u
+                   LEFT JOIN $wpdb->usermeta um_first 
+                   ON u.ID = um_first.user_id AND um_first.meta_key = 'first_name'
+                   LEFT JOIN $wpdb->usermeta um_last 
+                   ON u.ID = um_last.user_id AND um_last.meta_key = 'last_name'
+                   LEFT JOIN $wpdb->usermeta um_assigned_manager 
+                   ON u.ID = um_assigned_manager.user_id AND um_assigned_manager.meta_key = 'assigned_manager'
+                   LEFT JOIN $wpdb->usermeta um_role 
+                   ON u.ID = um_role.user_id AND um_role.meta_key = 'wp_capabilities'
+                   LEFT JOIN $wpdb->usermeta um_location
+                   ON u.ID = um_location.user_id AND um_location.meta_key = 'user_location'
+                   LEFT JOIN wp_locations l 
+                   ON um_location.meta_value = l.id
+                   WHERE u.ID != %d"; // Exclude current user
 
     $query_params = [$current_user_id];
 
@@ -142,20 +139,19 @@ function uct_get_users() {
         // Disable delete button if assigned agents exist
         $delete_disabled = ($assigned_agents_count > 0) ? 'disabled' : '';
         $delete_class = ($assigned_agents_count > 0) ? 'disabled-button' : '';
-        $delete_title = ($assigned_agents_count > 0) ? 'title="Cannot delete this user as they have assigned agents or managers."' : '';
 
         $data[] = [
             'ID' => $user->ID,
             'user_login' => $user->user_login,
             'user_name' => trim(($user->first_name ?? 'N/A') . ' ' . ($user->last_name ?? 'N/A')),
             'user_email' => $user->user_email,
-            'user_role' => $role ? ucwords(str_replace('_', ' ', $role)) : 'N/A',
+            'user_role' => ucfirst($role) ?? 'N/A',
             'assigned_manager' => $user->assigned_manager 
                                    ? ucfirst(get_user_meta($user->assigned_manager, 'first_name', true)) . " " . ucfirst(get_user_meta($user->assigned_manager, 'last_name', true))
                                    : 'N/A',
             'user_location' => $user->user_location ?? 'N/A',
             'actions' => '<button class="edit-user" data-id="' . $user->ID . '">Edit</button>' .
-              '<button class="delete-user ' . $delete_class . '" data-id="' . $user->ID . '" ' . $delete_disabled . ' ' . $delete_title . '>Delete</button>',
+                         '<button class="delete-user ' . $delete_class . '" data-id="' . $user->ID . '" ' . $delete_disabled . '>Delete</button>',
         ];
     }
 
