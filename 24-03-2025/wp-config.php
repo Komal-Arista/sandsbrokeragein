@@ -181,12 +181,28 @@ $allowed_ips = [
 // Define your site URL (Update to your actual site)
 $site_url = "https://www.sandsbrokerageinc.com"; // Change this to match your WordPress URL
 
+// Pages to restrict (Add the exact URL path for pages to restrict)
+$restricted_pages = [
+    "/login",
+    "/register",
+    "/account",
+    "/account/password",
+    "/search",
+    "/advance-search",
+    "/list-user",
+    "/user-analytics",
+    "/agent-activity-logs",
+    "/customers-data",
+];
+
+// Check if the user is NOT allowed and trying to access a restricted page
 if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ips)) {
-    // Prevent redirect loops by checking if the user is already on the homepage
-    if ($_SERVER['REQUEST_URI'] !== "/" && $_SERVER['REQUEST_URI'] !== "/index.php") {
-        header("HTTP/1.1 302 Found"); // Temporary Redirect
-        header("Location: " . $site_url);
-        exit();
+    foreach ($restricted_pages as $page) {
+        if (strpos($_SERVER['REQUEST_URI'], $page) === 0) {
+            header("HTTP/1.1 302 Found"); // Temporary Redirect
+            header("Location: " . $site_url);
+            exit();
+        }
     }
 }
 
