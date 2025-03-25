@@ -7,28 +7,28 @@ button.edit-user, button.delete-user {padding: 5px 10px;cursor: pointer;}
 .adv-search-result a.button-primary,.dataTables_length label,.usertable-logs .dataTables_filter label,.edit-user,button.delete-user,.dataTables_info,.submit{font-family: 'Roboto', sans-serif;}
 .adv-search-result a.button-primary{font-size: 15px;font-weight: 500;color: #000;display: inline-block;text-decoration: none;margin: 0 0 25px;background: #f7c600;
 padding: 8px 16px;border-radius: 6px;-webkit-transition: 0.5s ease-in-out;transition: 0.5s ease-in-out;}
-.adv-search-result a.button-primary:hover{background: #ebebeb;border-color: #e6e6e6;}
-.adv-search-result #user-table_wrapper .dataTables_length label select{width: 75px;padding: 6px 3px;font-size: 15px;border-radius: 6px;border-color: #ebebeb;color: #8d8d8d;margin: 0 6px 0 6px;}
+.adv-search-result a.button-primary:hover{background: #ebebeb;border-color: #c7c7c7;}
+.adv-search-result #user-table_wrapper .dataTables_length label select{width: 75px;padding: 6px 3px;font-size: 15px;border-radius: 6px;border-color: #c7c7c7;color: #8d8d8d;margin: 0 6px 0 6px;}
 .adv-search-result #user-table_wrapper .dataTables_length{margin: 0 0 25px;}
 .adv-search-result #user-table_wrapper .dataTables_length label{display: inline-block;font-size: 16px;font-weight: 400;}
 .usertable-logs .dataTables_filter label{display: inline-block;vertical-align: middle;font-size: 16px;font-weight: 400;}
-.usertable-logs .dataTables_filter label input[type="search"]{padding: 8px 10px;border-color: #ebebeb;color: #000;min-height: 37px;}
+.usertable-logs .dataTables_filter label input[type="search"]{padding: 8px 10px;border-color: #c7c7c7;color: #000;min-height: 37px;}
 
-.usertable-logs #user-table.dataTable thead th, .usertable-logs #user-table.dataTable thead td{border: solid 1px #e6e6e6;border-width: 0 1px 1px 0;font-size: 15px;font-family: 'Roboto', sans-serif;font-weight: 500;}
-.usertable-logs #user-table.dataTable.no-footer{border: solid 1px #e6e6e6;border-width: 1px 0px 0px 1px;}
+.usertable-logs #user-table.dataTable thead th, .usertable-logs #user-table.dataTable thead td{border: solid 1px #c7c7c7;border-width: 0 1px 1px 0;font-size: 15px;font-family: 'Roboto', sans-serif;font-weight: 500;}
+.usertable-logs #user-table.dataTable.no-footer{border: solid 1px #c7c7c7;border-width: 1px 0px 0px 1px;}
 .usertable-logs #user-table.dataTable.display > tbody > tr.odd >.sorting_1, .usertable-logs #user-table.dataTable.order-column.stripe > tbody > tr.odd >.sorting_1{box-shadow: none;}
-.usertable-logs #user-table td{border: solid 1px #e6e6e6;box-shadow: none;border-width: 0 1px 1px 0;font-size: 15px;font-family: 'Roboto', sans-serif;font-weight: 400;padding: 6px 10px;}
+.usertable-logs #user-table td{border: solid 1px #c7c7c7;box-shadow: none;border-width: 0 1px 1px 0;font-size: 15px;font-family: 'Roboto', sans-serif;font-weight: 400;padding: 6px 10px;}
 .usertable-logs #user-table.dataTable.no-footer{border-bottom: none;}
 .usertable-logs #user-table button.edit-user{background: #28a745;color: #fff;border: solid 1px #137a2b;font-size: 14px;font-weight: 400;padding: 6px 8px 6px;}
 .usertable-logs #user-table button.delete-user{background: #dc3545;color: #fff;border: solid 1px #b51b2b;font-size: 14px;font-weight: 400;padding: 6px 8px 6px;}
 .usertable-logs #user-table.dataTable thead > tr > th.sorting:before{opacity: .275;}
 .usertable-logs #user-table.dataTable.no-footer{margin: 0 0 25px;}
 .usertable-logs .dataTables_info{font-size: 15px;font-weight: 500;font-family: 'Roboto', sans-serif;border-right: solid 1px #ccc;padding: 6px 10px;margin-right: 10px;}
-.dataTables_paginate{font-size: 15px;font-family: 'Roboto', sans-serif;padding: 3px 10px !important;background: #fff;border: solid 1px #e6e6e6;}
+.dataTables_paginate{font-size: 15px;font-family: 'Roboto', sans-serif;padding: 3px 10px !important;background: #fff;border: solid 1px #c7c7c7;}
 .dataTables_paginate a.paginate_button.previous,.dataTables_paginate a.paginate_button next{padding: 3px 10px;}
-.dataTables_paginate span a.paginate_button{background: #fff !important;border-color: #e6e6e6 !important;padding: 3px 13px !important;-webkit-transition: 0.5s ease-in-out;transition: 0.5s ease-in-out;}
+.dataTables_paginate span a.paginate_button{background: #fff !important;border-color: #c7c7c7 !important;padding: 3px 13px !important;-webkit-transition: 0.5s ease-in-out;transition: 0.5s ease-in-out;}
 .dataTables_paginate span a.paginate_button.current{background: #f7c600 !important;border-color: #f3c50a !important;padding: 3px 13px !important;}
-.dataTables_paginate span a.paginate_button.current:hover{background: #ebebeb !important;border-color: #e6e6e6 !important;}
+.dataTables_paginate span a.paginate_button.current:hover{background: #ebebeb !important;border-color: #c7c7c7 !important;}
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover{color: #ddc400 !important;background: #000000 !important;}
 body.page-id-1053 .banbx_inn{top: 50%;}
 .usertable-logs .dataTables_filter{margin: 0 0 21px;}
@@ -38,11 +38,11 @@ body.page-id-1053 .inner_banner img{height: 250px !important;}
 .edit-flexrow .flexrow{display: flex;flex-wrap: wrap;margin: 0 -12px;}
 .edit-flexrow .equal-col{width: 33.3333%;padding: 0 12px;}
 .edit-flexrow .equal-col label{display: block;color: #555;font-size: 15px;font-family: 'Roboto', sans-serif;font-weight: 500;}
-.edit-flexrow .equal-col .control-form{display: block;width: 100%;border: solid 1px #ebebeb;padding: 10px 10px;font-size: 15px;min-height: 42px;color: #a6a6a6;font-family: 'Roboto', sans-serif;font-weight: 400;}
+.edit-flexrow .equal-col .control-form{display: block;width: 100%;border: solid 1px #c7c7c7;padding: 10px 10px;font-size: 15px;min-height: 42px;color: #a6a6a6;font-family: 'Roboto', sans-serif;font-weight: 400;}
 .edit-flexrow .equal-col .form-group .error{display: block;font-size: 13px;font-family: 'Roboto', sans-serif;font-weight: 400;line-height: 16px;margin: 6px 0 0;}
 .edit-flexrow .submit-col .submit{font-size: 15px;font-weight: 500;color: #000;display: inline-block;text-decoration: none;margin: 0 0 25px;background: #f7c600;padding: 12px 16px;border: solid 1px #f7c600;border-radius: 6px;
 -webkit-transition: 0.5s ease-in-out;transition: 0.5s ease-in-out;}
-.edit-flexrow .submit-col .submit:hover{background: #ebebeb;border-color: #e6e6e6;}
+.edit-flexrow .submit-col .submit:hover{background: #ebebeb;border-color: #c7c7c7;}
 .edit-flexrow .submit-col{width: 100%;padding: 12px 12px 0;text-align: center;}
 .edit-flexrow .submit-col #loader img,#loader img{max-width: 45px;height: 45px;fill: #fff;background-color: transparent;}
 .list-loader,.submit-loader{position: relative;}
@@ -55,6 +55,25 @@ body.page-id-1053 .inner_banner img{height: 250px !important;}
 .um-account-side .um-account-name .account-name{font-family: 'Roboto', sans-serif;font-size: 15px;color: #5e5e5e;}
 .user-list .list-loader #loader{left: 258px;}
 .um-account-side .um-account-name a:hover{color: #000000;}
+.um .um-form input[type=password],.um .um-form input[type=search], .um .um-form input[type=tel], .um .um-form input[type=text], 
+.um .um-form textarea{border-color: c7c7c7 !important;}
+.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td,
+.table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th{border-color: #c7c7c7 !important;}
+.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, 
+.table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th{border-color: #c7c7c7 !important;}
+table.dataTable.no-footer{border-color: #c7c7c7 !important;}
+.table-bordered{border-color: #c7c7c7 !important;}
+article.page.type-page .select2-container .select2-choice, 
+article.page.type-page .select2-container-multi .select2-choices, 
+article.page.type-page .select2-drop, .select2-drop-active, 
+article.page.type-page .select2-drop.select2-drop-above, 
+article.page.type-page .um .um-form input[type=number], 
+article.page.type-page .um .um-form input[type=password], 
+article.page.type-page .um .um-form input[type=search], 
+article.page.type-page .um .um-form input[type=tel], 
+article.page.type-page .um .um-form input[type=text], 
+article.page.type-page .um .um-form textarea, 
+article.page.type-page .um .upload-progress{border-color: #c7c7c7 !important;}
 
 /*ccc*/
 @media only screen and  (max-width : 1575px){

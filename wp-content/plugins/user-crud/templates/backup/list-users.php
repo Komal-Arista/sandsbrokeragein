@@ -4,7 +4,7 @@
     <div class="list-loader">
         <a href="?action=add" class="button-primary">Add New User</a>
 
-        <a href="<?php echo get_site_url();?>/account" class="button-primary">My Account</a>
+        <a href="<?php echo get_site_url();?>/account" class="button-primary">Back</a>
         
         <div id="loader" style="display:none;">
             <img src="<?php echo plugins_url( 'images/loading-gif.gif', __FILE__ ); ?>" alt="Loading..." />

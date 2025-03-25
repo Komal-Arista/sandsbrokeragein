@@ -1,6 +1,6 @@
 
 <div class="customers-add-logs edit-flexrow">
-    <a href="<?php echo get_site_url();?>/account" class="button-primary">My Account</a>
+    <a href="<?php echo get_site_url();?>/account" class="button-primary">Back</a>
     <div class="wrap">
         <h2>Add New Customer Data</h2>
 

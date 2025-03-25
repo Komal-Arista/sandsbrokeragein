@@ -51,7 +51,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-			<a href="<?php echo get_site_url();?>/account" class="button-primary">My Account</a>
+			<a href="<?php echo get_site_url();?>/account" class="button-primary">Back</a>
 				<?php
 				global $wpdb;
 				$table_prefix = $wpdb->prefix;
