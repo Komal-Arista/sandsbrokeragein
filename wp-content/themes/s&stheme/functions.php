@@ -778,6 +778,7 @@ function show_search_page_links_on_account_page() {
 			global $wpdb;
 			$table_prefix = $wpdb->prefix;
 			$user = wp_get_current_user();
+			$logout_url = wp_logout_url(home_url()); // Logout and redirect to homepage
 
 			$location_name = '';
 			$current_user_location_id = get_user_meta($user->ID, 'user_location', true);
@@ -846,17 +847,7 @@ function show_search_page_links_on_account_page() {
 			</script>
 			<?php	
 			}
-
 			?>
-			<style>
-				.um-account-profile-link {
-					display: none;
-				}
-				.um-account-name.uimob800-hide {
-					padding-bottom: 20px;
-				}
-			</style>
-
 			<script>
 				jQuery(document).ready(function(){
 					jQuery('.um-account-meta-img a').removeAttr('href');
@@ -868,12 +859,27 @@ function show_search_page_links_on_account_page() {
 					}
 					jQuery('.um-account-name').append('<div class="account-name"><?php echo esc_html($location_name); ?></div>');
 
+					//mobile-only logic
+					$('.um-account-name').append(
+						'<div class="account-name logout-mobile-only">' +
+							'<a href="<?php echo esc_url($logout_url); ?>"><span class="um-account-icon uimob800-hide"><i class="um-faicon-sign-out"></i></span> Logout</a>' +
+						'</div>'
+					);
+
 					jQuery(".um-account-side ul").append('<li id="sns-logout"><a href="<?php echo site_url("/logout/"); ?>" class="um-account-link real_url"><span class="um-account-icontip uimob800-show um-tip-w"><i class="um-faicon-user"></i></span><span class="um-account-icon uimob800-hide"><i class="um-faicon-sign-out"></i></span><span class="um-account-title uimob800-hide">Logout</span><span class="um-account-arrow uimob800-hide"><i class="um-faicon-angle-right"></i></span></a></li>');
 					jQuery('#sns-logout').click(function(){
 					   window.location.href = "<?php echo site_url('/logout/'); ?>";
 					});
 				});
 			</script>
+			<style>
+				.um-account-profile-link {
+					display: none;
+				}
+				.um-account-name.uimob800-hide {
+					padding-bottom: 20px;
+				}
+			</style>
 			<?php				
 		}
     }
