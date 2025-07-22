@@ -1112,6 +1112,37 @@ add_filter( 'um_admin_bulk_user_actions_hook', function( $actions ){
     return $actions;
 });
 
+
+function get_client_ip() {
+	$ipaddress = '';
+	if (getenv('HTTP_CLIENT_IP'))
+		$ipaddress = getenv('HTTP_CLIENT_IP');
+	else if(getenv('HTTP_X_FORWARDED_FOR'))
+		$ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+	else if(getenv('HTTP_X_FORWARDED'))
+		$ipaddress = getenv('HTTP_X_FORWARDED');
+	else if(getenv('HTTP_FORWARDED_FOR'))
+		$ipaddress = getenv('HTTP_FORWARDED_FOR');
+	else if(getenv('HTTP_FORWARDED'))
+	   $ipaddress = getenv('HTTP_FORWARDED');
+	else if(getenv('REMOTE_ADDR'))
+		$ipaddress = getenv('REMOTE_ADDR');
+	else
+		$ipaddress = 'UNKNOWN';
+	return $ipaddress;
+}
+
+function restrictedPages() {
+	if(get_client_ip() != '180.151.44.206' && get_client_ip() != '103.229.27.26' && get_client_ip() != '203.193.167.99' && get_client_ip() != '115.247.107.18' && get_client_ip() != '183.177.127.146' && get_client_ip() != '50.184.119.78' && get_client_ip() != '14.195.111.10' && get_client_ip() != '122.176.23.236' && get_client_ip() != '67.83.5.228'){
+	?>
+		<script> location.replace("<?php echo site_url();?>"); </script>
+	<?php
+	}
+}
+add_shortcode('restrictedpages', 'restrictedPages');
+
+
+
 // Handle User Analytics Logs Page Data
 function handle_user_analytics_ajax() {
     global $wpdb;
@@ -1129,91 +1160,98 @@ function handle_user_analytics_ajax() {
     $limit = isset($_GET['length']) ? intval($_GET['length']) : 40;
     $search_value = isset($_GET['search_value']) ? sanitize_text_field(trim($_GET['search_value'])) : '';
 
-    // Calculate offset for pagination
     $offset = max(0, $page);
+    $where_clause = "1=1";
 
-    $where_clause = "1=1"; // Default condition to prevent SQL errors
-
+    // Determine user access
     if (in_array('manager', (array) $current_user->roles)) {
-        // Get agents assigned to this manager
         $agent_ids = $wpdb->get_col($wpdb->prepare(
             "SELECT agent_id FROM {$table_prefix}agent_manager_relationships WHERE manager_id = %d", 
             $current_user->ID
         ));
 
-        if (!empty($agent_ids)) {
-            $agent_ids_str = implode(",", array_map('intval', $agent_ids));
-            $where_clause .= " AND s.user_id IN ($agent_ids_str)";
-        } else {
-            $where_clause .= " AND 1=0"; // No assigned agents, return no data
-        }
-    } else if (in_array('super_manager', (array) $current_user->roles)) {
-        // Fetch the super manager's location
+        $where_clause .= !empty($agent_ids) ? 
+            " AND s.user_id IN (" . implode(",", array_map('intval', $agent_ids)) . ")" : 
+            " AND 1=0";
+        
+    } elseif (in_array('super_manager', (array) $current_user->roles)) {
         $current_user_location = get_user_meta($current_user->ID, 'user_location', true);
 
-        // Fetch all users at the same location, excluding administrator and super_admin
         $users = get_users([
-            'role__in'   => ['manager', 'agent'], // Only these roles
+            'role__in'   => ['manager', 'agent'],
             'meta_key'   => 'user_location',
             'meta_value' => $current_user_location,
-            'fields'     => 'ID', // Get only user IDs
+            'fields'     => 'ID',
         ]);
 
-        if (!empty($users)) {
-            $users_ids_str = implode(",", array_map('intval', $users));
-            $where_clause .= " AND s.user_id IN ($users_ids_str)";
-        } else {
-            $where_clause .= " AND 1=0"; // No users at this location
-        }
-    } else if (in_array('super_admin', (array) $current_user->roles)) {
-        // Super Admin can see all users (except ID=1, which is usually the main admin account)
-        $totalUsers = $wpdb->get_results("SELECT ID FROM {$table_prefix}users", ARRAY_A);
-        $users_ids = array_column($totalUsers, 'ID');
-
-        if (!empty($users_ids)) {
-            $users_ids_str = implode(",", array_map('intval', $users_ids));
-            $where_clause .= " AND s.user_id IN ($users_ids_str)";
-        } else {
-            $where_clause .= " AND 1=0"; // No users found
-        }
+        $where_clause .= !empty($users) ? 
+            " AND s.user_id IN (" . implode(",", array_map('intval', $users)) . ")" : 
+            " AND 1=0";
+        
+    } elseif (in_array('super_admin', (array) $current_user->roles)) {
+        $user_ids = $wpdb->get_col("SELECT ID FROM {$table_prefix}users");
+        $where_clause .= !empty($user_ids) ? 
+            " AND s.user_id IN (" . implode(",", array_map('intval', $user_ids)) . ")" : 
+            " AND 1=0";
+        
     } else {
         wp_send_json_error('Unauthorized access');
         exit;
     }
 
-    // Apply search filter only if length > 3
+    // Apply search filter
     if (!empty($search_value) && strlen($search_value) > 3) {
         $search_value = esc_sql($search_value);
         $where_clause .= $wpdb->prepare(
-            " AND (s.display_name LIKE %s 
+            " AND (
+                um1.meta_value LIKE %s 
+                OR um2.meta_value LIKE %s 
                 OR s.user_email LIKE %s 
                 OR s.search_term LIKE %s 
                 OR s.selected_term LIKE %s 
                 OR s.search_page LIKE %s 
                 OR s.location LIKE %s 
-                OR s.date LIKE %s)", 
-            "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%"
+                OR s.date LIKE %s
+            )", 
+            "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%",
+            "%{$search_value}%", "%{$search_value}%", "%{$search_value}%", "%{$search_value}%"
         );
     }
 
-    // Get total records
-    $totalRecordsQuery = "SELECT COUNT(*) FROM {$table_prefix}search_data s WHERE $where_clause";
-    $totalRecords = $wpdb->get_var($totalRecordsQuery);
-
-    // Get paginated results
-    $query = $wpdb->prepare(
-        "SELECT s.display_name, s.user_email, s.search_term, s.selected_term, s.search_page, s.location, s.date
+    // Total records
+    $total_query = "
+        SELECT COUNT(*)
         FROM {$table_prefix}search_data s
-        WHERE $where_clause ORDER BY s.id DESC LIMIT %d OFFSET %d", $limit, $offset
-    );
-    
+        LEFT JOIN {$table_prefix}usermeta um1 ON s.user_id = um1.user_id AND um1.meta_key = 'first_name'
+        LEFT JOIN {$table_prefix}usermeta um2 ON s.user_id = um2.user_id AND um2.meta_key = 'last_name'
+        WHERE $where_clause
+    ";
+    $totalRecords = $wpdb->get_var($total_query);
+
+    // Get paginated results with first_name + last_name
+    $query = $wpdb->prepare("
+        SELECT 
+            CONCAT_WS(' ', um1.meta_value, um2.meta_value) AS full_name,
+            s.user_email,
+            s.search_term,
+            s.selected_term,
+            s.search_page,
+            s.location,
+            s.date
+        FROM {$table_prefix}search_data s
+        LEFT JOIN {$table_prefix}usermeta um1 ON s.user_id = um1.user_id AND um1.meta_key = 'first_name'
+        LEFT JOIN {$table_prefix}usermeta um2 ON s.user_id = um2.user_id AND um2.meta_key = 'last_name'
+        WHERE $where_clause
+        ORDER BY s.id DESC
+        LIMIT %d OFFSET %d
+    ", $limit, $offset);
+
     $users = $wpdb->get_results($query);
 
-    // Prepare response data for DataTables
     $response = array(
         'draw' => isset($_GET['draw']) ? intval($_GET['draw']) : 1,
         'recordsTotal' => (int) $totalRecords,
-        'recordsFiltered' => (int) $totalRecords, 
+        'recordsFiltered' => (int) $totalRecords,
         'data' => $users
     );
 
@@ -1222,14 +1260,10 @@ function handle_user_analytics_ajax() {
 }
 add_action('wp_ajax_user_analytics_data', 'handle_user_analytics_ajax');
 
+add_action('wp_ajax_user_analytics_data', 'handle_user_analytics_ajax');
 
-
-
-
-
-
-
-
-
-
-
+// Disabled REST API call for all users 
+/*function disable_rest_api_for_all_users($result) {
+    return new WP_Error('rest_disabled', __('REST API access is restricted.'), array('status' => 403));
+}
+add_filter('rest_authentication_errors', 'disable_rest_api_for_all_users');*/

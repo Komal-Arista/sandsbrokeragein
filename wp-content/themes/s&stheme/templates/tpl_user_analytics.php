@@ -59,36 +59,36 @@
 						$current_user = wp_get_current_user();
 
 						if ( in_array('manager', (array) $current_user->roles) || in_array('super_manager', (array) $current_user->roles) || in_array('super_admin', (array) $current_user->roles)) {
-                            $location_id = get_user_meta($current_user->ID, 'user_location', true);
-                            $show_location = (in_array('super_admin', (array) $current_user->roles)) ? true : false; 
-                    ?>
-				<div class="manager">
-					<table id="manager_agent_list" class="table table-bordered table-hover dt-responsive">
-						<thead>
-							<tr>
-								<th>Sr. No.</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Search Term</th>
-								<th>Selected Term</th>
-                                <th>Search Page</th>
-                                <?php if($show_location) { ?><th>Location</th> <?php } ?>
-								<th>Date</th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- Data will be inserted dynamically by DataTables -->
-						</tbody>
-					</table>
-				</div>
-				<?php
-                    } else {
-                        echo '<p class="cerror">You do not have permission to view this page.</p>';
-                    }
-                } else {
-                    echo '<p class="cerror">You must be logged in to view this page.</p>';
-                }
-                ?>
+										$location_id = get_user_meta($current_user->ID, 'user_location', true);
+										$show_location = (in_array('super_admin', (array) $current_user->roles)) ? true : false; 
+						?>
+										<div class="manager">
+											<table id="manager_agent_list" class="table table-bordered table-hover dt-responsive">
+												<thead>
+													<tr>
+														<th>Sr. No.</th>
+														<th>Name</th>
+														<th>Email</th>
+														<th>Search Term</th>
+														<th>Selected Term</th>
+														<th>Search Page</th>
+														<?php if($show_location) { ?><th>Location</th> <?php } ?>
+														<th>Date</th>
+													</tr>
+												</thead>
+												<tbody>
+													<!-- Data will be inserted dynamically by DataTables -->
+												</tbody>
+											</table>
+										</div>
+						<?php
+						} else {
+								echo '<p class="cerror">You do not have permission to view this page.</p>';
+						}
+				} else {
+						echo '<p class="cerror">You must be logged in to view this page.</p>';
+				}
+				?>
 			</div>
 		</div>
 	</div>
@@ -107,8 +107,8 @@
                 } 
             },
             { 
-                "data": "display_name",
-                "render": function(data) {
+                "data": "full_name",
+                "render": function(data) {										
                     return data && data.trim() !== "" ? data : "N/A";
                 }
             },
@@ -143,6 +143,8 @@
                 }
             }
         ];
+
+				console.log(columns);
 
         // Add Location column if user is an Super Admin
         if (show_location) {
